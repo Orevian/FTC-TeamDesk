@@ -1,0 +1,101 @@
+<UserControl x:Class="FTC.TeamDesk.UI.Views.Pages.AnalyticsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:FTC.TeamDesk.UI.Localization"
+             xmlns:ctl="clr-namespace:FTC.TeamDesk.UI.Controls"
+             xmlns:h="clr-namespace:FTC.TeamDesk.UI.Helpers"
+             xmlns:ui="clr-namespace:FTC.TeamDesk.UI"
+             xmlns:enums="clr-namespace:FTC.TeamDesk.Core.Enums;assembly=FTC.TeamDesk.Core">
+  <ScrollViewer Style="{StaticResource PageScroll}">
+    <StackPanel Margin="32,28,32,32">
+      <Grid Margin="0,0,0,16">
+        <StackPanel>
+          <TextBlock Text="{loc:Loc Nav.Analytics}" Style="{StaticResource TextTitle}" />
+          <TextBlock Text="{loc:Loc Analytics.Subtitle}" Style="{StaticResource TextCaption}" Margin="0,4,0,0" />
+        </StackPanel>
+      </Grid>
+      <Grid Margin="0,0,0,16">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="160" /><ColumnDefinition Width="160" /><ColumnDefinition Width="220" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <DatePicker SelectedDate="{Binding From}" ToolTip="{loc:Loc Analytics.From}" />
+        <DatePicker Grid.Column="1" Margin="8,0,0,0" SelectedDate="{Binding To}" ToolTip="{loc:Loc Analytics.To}" />
+        <ComboBox Grid.Column="2" Margin="8,0,0,0" ItemsSource="{Binding MemberOptions}" SelectedItem="{Binding Member}" DisplayMemberPath="Label" />
+        <Button Grid.Column="3" Margin="8,0,0,0" Style="{StaticResource GhostButton}" Command="{Binding ResetCommand}" Content="{loc:Loc Common.ClearFilters}" />
+      </Grid>
+      <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+        <StackPanel>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.MemberDistribution}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+              <ctl:DonutChart Items="{Binding MemberDistribution}" Width="140" Height="140" HorizontalAlignment="Left" EmptyText="{loc:Loc Common.NoData}" CenterCaption="{loc:Loc Nav.Team}" />
+              <ItemsControl Grid.Column="1" ItemsSource="{Binding MemberDistribution}" ItemTemplate="{StaticResource LegendTemplate}" VerticalAlignment="Center" /></Grid>
+            
+          </StackPanel>
+        </Border>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.Skills}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <ctl:ColumnChart Items="{Binding Skills}" Height="220" SingleColor="True" EmptyText="{loc:Loc Common.NoData}" />
+            
+          </StackPanel>
+        </Border>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.BudgetUsage}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <ctl:SegmentBar Items="{Binding BudgetUsage}" Height="16" Margin="0,4,0,10" /><ItemsControl ItemsSource="{Binding BudgetUsage}" ItemTemplate="{StaticResource LegendTemplate}" />
+            
+          </StackPanel>
+        </Border>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.CategoryPlanned}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <ctl:ColumnChart Items="{Binding CategoryPlanned}" Height="220" EmptyText="{loc:Loc Common.NoData}" />
+            
+          </StackPanel>
+        </Border>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.ApplicationStatuses}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+              <ctl:DonutChart Items="{Binding ApplicationStatuses}" Width="140" Height="140" HorizontalAlignment="Left" EmptyText="{loc:Loc Common.NoData}" CenterCaption="{loc:Loc Nav.Applications}" />
+              <ItemsControl Grid.Column="1" ItemsSource="{Binding ApplicationStatuses}" ItemTemplate="{StaticResource LegendTemplate}" VerticalAlignment="Center" /></Grid>
+            
+          </StackPanel>
+        </Border>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.SpendingOverTime}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <ctl:LineChart Items="{Binding SpendingLine}" Height="220" EmptyText="{loc:Loc Common.NoData}" />
+            
+          </StackPanel>
+        </Border>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.CategorySpending}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <ctl:ColumnChart Items="{Binding CategorySpending}" Height="220" EmptyText="{loc:Loc Common.NoData}" />
+            
+          </StackPanel>
+        </Border>
+          
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Analytics.MemberDevelopment}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+            <ctl:LineChart Items="{Binding Development}" Height="220" MinValue="0" MaxValue="10" EmptyText="{loc:Loc Analytics.Development.Empty}" /><ItemsControl ItemsSource="{Binding Development}" Margin="0,8,0,0"><ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel><ItemsControl.ItemTemplate><DataTemplate><StackPanel Orientation="Horizontal" Margin="0,0,16,0"><ctl:ChartSwatch ColorIndex="{Binding ColorIndex}" /><TextBlock Text="{Binding Name}" Margin="6,0,0,0" FontSize="12" /></StackPanel></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+            
+          </StackPanel>
+        </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
