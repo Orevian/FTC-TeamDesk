@@ -1,0 +1,112 @@
+<UserControl x:Class="FTC.TeamDesk.UI.Views.Pages.MemberDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:FTC.TeamDesk.UI.Localization"
+             xmlns:ctl="clr-namespace:FTC.TeamDesk.UI.Controls"
+             xmlns:h="clr-namespace:FTC.TeamDesk.UI.Helpers"
+             xmlns:ui="clr-namespace:FTC.TeamDesk.UI">
+  <ScrollViewer Style="{StaticResource PageScroll}">
+    <StackPanel Margin="32,28,32,32">
+      <Button Style="{StaticResource GhostButton}" Command="{Binding BackCommand}" HorizontalAlignment="Left" Margin="-10,0,0,8">
+        <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE72B;" Style="{StaticResource IconText}" FontSize="12" Margin="0,0,8,0" /><TextBlock Text="{loc:Loc Nav.Team}" /></StackPanel>
+      </Button>
+      <Grid Margin="0,0,0,20">
+        <StackPanel Orientation="Horizontal">
+          <ctl:Avatar Initials="{Binding Initials}" Tone="{Binding Tone}" ImagePath="{Binding AvatarPath}" Diameter="64" />
+          <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+            <TextBlock Text="{Binding Name}" Style="{StaticResource TextTitle}" />
+            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+              <Ellipse Width="8" Height="8" Fill="{Binding StatusColor, Converter={StaticResource HexToBrush}}" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding StatusName}" Margin="8,0,0,0" />
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding EditCommand}" Content="{loc:Loc Common.Edit}" />
+      </Grid>
+
+      <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="3*" /></Grid.ColumnDefinitions>
+        <StackPanel>
+          <Border Style="{StaticResource Panel}">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Member.Profile}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+              <TextBlock Text="{loc:Loc Member.Email}" Style="{StaticResource TextLabel}" /><TextBlock Text="{Binding Email}" Margin="0,0,0,10" />
+              <TextBlock Text="{loc:Loc Member.Phone}" Style="{StaticResource TextLabel}" /><TextBlock Text="{Binding Phone}" Margin="0,0,0,10" />
+              <TextBlock Text="{loc:Loc Member.Joined}" Style="{StaticResource TextLabel}" /><TextBlock Text="{Binding Joined}" />
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Member.Areas}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <ItemsControl ItemsSource="{Binding Areas}">
+                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate><DataTemplate><Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="10" Padding="10,3" Margin="0,0,6,6"><TextBlock Text="{Binding}" Foreground="{DynamicResource AccentBrush}" FontSize="12" FontWeight="SemiBold" /></Border></DataTemplate></ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <TextBlock Text="{loc:Loc Member.Skills}" Style="{StaticResource TextH2}" Margin="0,12,0,8" />
+              <ItemsControl ItemsSource="{Binding Skills}">
+                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate><DataTemplate><Border Background="{DynamicResource HoverBrush}" CornerRadius="10" Padding="10,3" Margin="0,0,6,6"><TextBlock Text="{Binding}" FontSize="12" /></Border></DataTemplate></ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Member.Responsibilities}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <TextBlock Text="{Binding Responsibilities}" TextWrapping="Wrap" />
+              <TextBlock Text="{loc:Loc Member.Notes}" Style="{StaticResource TextH2}" Margin="0,16,0,8" />
+              <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0" Visibility="{Binding HasCustomFields, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Member.CustomFields}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <ItemsControl ItemsSource="{Binding CustomFields}">
+                <ItemsControl.ItemTemplate><DataTemplate><StackPanel Margin="0,0,0,8"><TextBlock Text="{Binding Key}" Style="{StaticResource TextLabel}" /><TextBlock Text="{Binding Value}" TextWrapping="Wrap" /></StackPanel></DataTemplate></ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2">
+          <Border Style="{StaticResource Panel}">
+            <StackPanel>
+              <Grid Margin="0,0,0,4">
+                <StackPanel>
+                  <TextBlock Text="{loc:Loc Member.Development}" Style="{StaticResource TextH2}" />
+                  <TextBlock Text="{loc:Loc Member.Development.Hint}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,4,60,0" />
+                </StackPanel>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding AddRecordCommand}" Content="{loc:Loc Team.Record.New}" />
+              </Grid>
+              <ctl:LineChart Items="{Binding Development}" Height="240" MinValue="0" MaxValue="10" EmptyText="{loc:Loc Member.Development.Empty}" Margin="0,12,0,0" />
+              <ItemsControl ItemsSource="{Binding Development}" Margin="0,8,0,0">
+                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate><DataTemplate><StackPanel Orientation="Horizontal" Margin="0,0,16,0"><ctl:ChartSwatch ColorIndex="{Binding ColorIndex}" /><TextBlock Text="{Binding Name}" Margin="6,0,0,0" FontSize="12" /></StackPanel></DataTemplate></ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0" Padding="0,20,0,8">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Member.History}" Style="{StaticResource TextH2}" Margin="20,0,20,8" />
+              <DataGrid ItemsSource="{Binding Records}" RowHeight="40" MaxHeight="360" Margin="8,0">
+                <DataGrid.Columns>
+                  <DataGridTextColumn Header="{loc:Loc Common.Date}" Binding="{Binding Date}" Width="110" ElementStyle="{StaticResource GridText}" />
+                  <DataGridTextColumn Header="{loc:Loc Member.Area}" Binding="{Binding Area}" Width="*" ElementStyle="{StaticResource GridText}" />
+                  <DataGridTextColumn Header="{loc:Loc Member.Score}" Binding="{Binding Score}" Width="70" ElementStyle="{StaticResource GridText}" />
+                  <DataGridTextColumn Header="{loc:Loc Member.Note}" Binding="{Binding Note}" Width="2*" ElementStyle="{StaticResource GridText}" />
+                  <DataGridTemplateColumn Width="48">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Button Style="{StaticResource IconButton}" Content="&#xE74D;" ToolTip="{loc:Loc Common.Delete}" AutomationProperties.Name="Delete"
+                                Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                </DataGrid.Columns>
+              </DataGrid>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
