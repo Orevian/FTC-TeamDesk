@@ -1,0 +1,133 @@
+<UserControl x:Class="FTC.TeamDesk.UI.Views.Pages.ApplicationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:FTC.TeamDesk.UI.Localization"
+             xmlns:ctl="clr-namespace:FTC.TeamDesk.UI.Controls"
+             xmlns:h="clr-namespace:FTC.TeamDesk.UI.Helpers"
+             xmlns:ui="clr-namespace:FTC.TeamDesk.UI"
+             xmlns:enums="clr-namespace:FTC.TeamDesk.Core.Enums;assembly=FTC.TeamDesk.Core">
+  <Grid Margin="32,28,32,24">
+    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+    <Grid Margin="0,0,0,16">
+      <StackPanel>
+        <TextBlock Text="{loc:Loc Nav.Applications}" Style="{StaticResource TextTitle}" />
+        <TextBlock Text="{Binding CountText}" Style="{StaticResource TextCaption}" Margin="0,4,0,0" />
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <TextBlock Text="{Binding SyncStatus}" Style="{StaticResource TextCaption}" VerticalAlignment="Center" Margin="0,0,12,0" Visibility="{Binding SyncStatus, Converter={StaticResource NullToVis}}" />
+        <Button Style="{StaticResource PrimaryButton}" Command="{Binding SyncCommand}" Content="{loc:Loc Applications.Sync}" ToolTip="Ctrl+N" />
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="1" Margin="0,0,0,12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" /><ColumnDefinition Width="170" /><ColumnDefinition Width="150" /><ColumnDefinition Width="150" />
+        <ColumnDefinition Width="170" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Loc Applications.Search}" AutomationProperties.Name="Search" />
+      <ComboBox Grid.Column="1" Margin="8,0,0,0" ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding StatusFilter}" DisplayMemberPath="Label" />
+      <DatePicker Grid.Column="2" Margin="8,0,0,0" SelectedDate="{Binding From}" ToolTip="{loc:Loc Applications.From}" />
+      <DatePicker Grid.Column="3" Margin="8,0,0,0" SelectedDate="{Binding To}" ToolTip="{loc:Loc Applications.To}" />
+      <ComboBox Grid.Column="4" Margin="8,0,0,0" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding Sort}" DisplayMemberPath="Label" />
+      <Button Grid.Column="5" Style="{StaticResource IconButton}" Content="{Binding SortGlyph}" Command="{Binding ToggleDirectionCommand}" Margin="4,0,0,0" ToolTip="{loc:Loc Applications.SortDirection}" />
+      <Button Grid.Column="6" Style="{StaticResource GhostButton}" Command="{Binding ClearFiltersCommand}" Content="{loc:Loc Common.ClearFilters}" />
+    </Grid>
+
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions><ColumnDefinition Width="3*" /><ColumnDefinition Width="16" /><ColumnDefinition Width="2*" MinWidth="340" /></Grid.ColumnDefinitions>
+      <Border Style="{StaticResource Panel}" Padding="0">
+        <Grid>
+          <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+          <DataGrid ItemsSource="{Binding Rows}" SelectedItem="{Binding Selected, Mode=TwoWay}" Margin="8,4" AutomationProperties.Name="Applications">
+            <DataGrid.Columns>
+              <DataGridTemplateColumn Header="{loc:Loc Applications.Column.Applicant}" Width="2*" MinWidth="160">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <StackPanel VerticalAlignment="Center">
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                      <TextBlock Text="{Binding Email}" Style="{StaticResource TextCaption}" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTextColumn Header="{loc:Loc Applications.Column.Submitted}" Binding="{Binding Submitted}" Width="110" ElementStyle="{StaticResource GridText}" />
+              <DataGridTextColumn Header="{loc:Loc Applications.Column.Skills}" Binding="{Binding Skills}" Width="*" ElementStyle="{StaticResource GridText}" />
+              <DataGridTemplateColumn Header="{loc:Loc Applications.Column.Status}" Width="120">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate><ctl:StatusBadge Text="{Binding Status}" Tone="{Binding Tone}" VerticalAlignment="Center" /></DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+            </DataGrid.Columns>
+          </DataGrid>
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVis}}">
+            <TextBlock Text="&#xE8F1;" Style="{StaticResource IconText}" FontSize="36" Foreground="{DynamicResource TextMutedBrush}" />
+            <TextBlock Text="{loc:Loc Applications.Empty}" Margin="0,10,0,4" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc Applications.Empty.Hint}" Style="{StaticResource TextCaption}" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="360" TextAlignment="Center" />
+          </StackPanel>
+          <Border Grid.Row="1" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="12,8">
+            <Grid>
+              <TextBlock Text="{Binding PageText}" Style="{StaticResource TextCaption}" VerticalAlignment="Center" />
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource IconButton}" Content="&#xE76B;" Command="{Binding PreviousPageCommand}" ToolTip="{loc:Loc Common.Previous}" AutomationProperties.Name="Previous page" />
+                <Button Style="{StaticResource IconButton}" Content="&#xE76C;" Command="{Binding NextPageCommand}" ToolTip="{loc:Loc Common.Next}" AutomationProperties.Name="Next page" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="2" Style="{StaticResource Panel}" Padding="0">
+        <Grid>
+          <TextBlock Text="{loc:Loc Applications.SelectHint}" Style="{StaticResource TextCaption}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding HasDetail, Converter={StaticResource InvBoolToVis}}" />
+          <ScrollViewer Style="{StaticResource PageScroll}" Visibility="{Binding HasDetail, Converter={StaticResource BoolToVis}}">
+            <StackPanel Margin="22">
+              <TextBlock Text="{Binding DetailName}" Style="{StaticResource TextH2}" FontSize="18" TextWrapping="Wrap" />
+              <TextBlock Text="{Binding DetailEmail}" Style="{StaticResource TextSecondary}" Margin="0,2,0,0" />
+              <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <ctl:StatusBadge Text="{Binding DetailStatus}" Tone="{Binding DetailTone}" />
+                <TextBlock Text="{Binding DetailSubmitted}" Style="{StaticResource TextCaption}" Margin="10,0,0,0" VerticalAlignment="Center" />
+              </StackPanel>
+
+              <TextBlock Text="{loc:Loc Applications.ChangeStatus}" Style="{StaticResource TextLabel}" Margin="0,18,0,6" />
+              <WrapPanel>
+                <Button Content="{loc:Loc ApplicationStatus.Reviewing}" Command="{Binding SetStatusCommand}" CommandParameter="{x:Static enums:ApplicationStatus.Reviewing}" Margin="0,0,6,6" />
+                <Button Content="{loc:Loc ApplicationStatus.Accepted}" Command="{Binding SetStatusCommand}" CommandParameter="{x:Static enums:ApplicationStatus.Accepted}" Margin="0,0,6,6" />
+                <Button Content="{loc:Loc ApplicationStatus.Maybe}" Command="{Binding SetStatusCommand}" CommandParameter="{x:Static enums:ApplicationStatus.Maybe}" Margin="0,0,6,6" />
+                <Button Content="{loc:Loc ApplicationStatus.Rejected}" Command="{Binding SetStatusCommand}" CommandParameter="{x:Static enums:ApplicationStatus.Rejected}" Margin="0,0,6,6" />
+                <Button Content="{loc:Loc ApplicationStatus.Pending}" Command="{Binding SetStatusCommand}" CommandParameter="{x:Static enums:ApplicationStatus.Pending}" Margin="0,0,6,6" />
+              </WrapPanel>
+
+              <Border Style="{StaticResource Divider}" />
+              <Grid>
+                <TextBlock Text="{loc:Loc Applications.AiSupport}" Style="{StaticResource TextLabel}" VerticalAlignment="Center" />
+                <Button HorizontalAlignment="Right" Command="{Binding AnalyzeCommand}" Content="{loc:Loc Applications.Analyze}" />
+              </Grid>
+              <TextBlock Text="{loc:Loc Applications.AiDisclaimer}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,6,0,0" />
+
+              <Border Style="{StaticResource Divider}" />
+              <TextBlock Text="{loc:Loc Applications.Answers}" Style="{StaticResource TextLabel}" />
+              <ItemsControl ItemsSource="{Binding Answers}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Margin="0,0,0,12">
+                      <TextBlock Text="{Binding Question}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" />
+                      <TextBlock Text="{Binding Answer}" TextWrapping="Wrap" Margin="0,2,0,0" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+
+              <Border Style="{StaticResource Divider}" />
+              <TextBlock Text="{loc:Loc Applications.Notes}" Style="{StaticResource TextLabel}" />
+              <TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" MinHeight="90" />
+              <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Button Style="{StaticResource PrimaryButton}" Command="{Binding SaveNotesCommand}" Content="{loc:Loc Common.Save}" />
+                <Button Command="{Binding DeleteCommand}" Content="{loc:Loc Common.Delete}" Margin="8,0,0,0" />
+              </StackPanel>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>
