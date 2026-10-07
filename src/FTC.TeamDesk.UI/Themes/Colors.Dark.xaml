@@ -1,0 +1,67 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Color x:Key="AppBgColor">#0F1217</Color>
+  <SolidColorBrush x:Key="AppBgBrush" Color="{StaticResource AppBgColor}" />
+  <Color x:Key="SurfaceColor">#171B22</Color>
+  <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
+  <Color x:Key="SurfaceAltColor">#1C212A</Color>
+  <SolidColorBrush x:Key="SurfaceAltBrush" Color="{StaticResource SurfaceAltColor}" />
+  <Color x:Key="BorderColor">#272D38</Color>
+  <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}" />
+  <Color x:Key="BorderStrongColor">#3A4250</Color>
+  <SolidColorBrush x:Key="BorderStrongBrush" Color="{StaticResource BorderStrongColor}" />
+  <Color x:Key="TextColor">#E7EAF0</Color>
+  <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
+  <Color x:Key="TextSecondaryColor">#B4BCCB</Color>
+  <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}" />
+  <Color x:Key="TextMutedColor">#8A93A3</Color>
+  <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMutedColor}" />
+  <Color x:Key="AccentColor">#5B8CFF</Color>
+  <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+  <Color x:Key="AccentHoverColor">#7BA2FF</Color>
+  <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHoverColor}" />
+  <Color x:Key="AccentSoftColor">#1B2A4D</Color>
+  <SolidColorBrush x:Key="AccentSoftBrush" Color="{StaticResource AccentSoftColor}" />
+  <Color x:Key="OnAccentColor">#0B1220</Color>
+  <SolidColorBrush x:Key="OnAccentBrush" Color="{StaticResource OnAccentColor}" />
+  <Color x:Key="SuccessColor">#3DBE84</Color>
+  <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}" />
+  <Color x:Key="SuccessSoftColor">#12281F</Color>
+  <SolidColorBrush x:Key="SuccessSoftBrush" Color="{StaticResource SuccessSoftColor}" />
+  <Color x:Key="WarningColor">#E0A23A</Color>
+  <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}" />
+  <Color x:Key="WarningSoftColor">#2F2410</Color>
+  <SolidColorBrush x:Key="WarningSoftBrush" Color="{StaticResource WarningSoftColor}" />
+  <Color x:Key="DangerColor">#F0716B</Color>
+  <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource DangerColor}" />
+  <Color x:Key="DangerSoftColor">#35191A</Color>
+  <SolidColorBrush x:Key="DangerSoftBrush" Color="{StaticResource DangerSoftColor}" />
+  <Color x:Key="InfoSoftColor">#1B2A4D</Color>
+  <SolidColorBrush x:Key="InfoSoftBrush" Color="{StaticResource InfoSoftColor}" />
+  <Color x:Key="HoverColor">#212733</Color>
+  <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}" />
+  <Color x:Key="SelectedColor">#1F2B47</Color>
+  <SolidColorBrush x:Key="SelectedBrush" Color="{StaticResource SelectedColor}" />
+  <Color x:Key="SidebarBgColor">#12161C</Color>
+  <SolidColorBrush x:Key="SidebarBgBrush" Color="{StaticResource SidebarBgColor}" />
+  <Color x:Key="ScrimColor">#99000000</Color>
+  <SolidColorBrush x:Key="ScrimBrush" Color="{StaticResource ScrimColor}" />
+  <Color x:Key="ShadowColor">#66000000</Color>
+  <SolidColorBrush x:Key="ShadowBrush" Color="{StaticResource ShadowColor}" />
+  <Color x:Key="Chart1Color">#3987E5</Color>
+  <SolidColorBrush x:Key="Chart1Brush" Color="{StaticResource Chart1Color}" />
+  <Color x:Key="Chart2Color">#D95926</Color>
+  <SolidColorBrush x:Key="Chart2Brush" Color="{StaticResource Chart2Color}" />
+  <Color x:Key="Chart3Color">#199E70</Color>
+  <SolidColorBrush x:Key="Chart3Brush" Color="{StaticResource Chart3Color}" />
+  <Color x:Key="Chart4Color">#C98500</Color>
+  <SolidColorBrush x:Key="Chart4Brush" Color="{StaticResource Chart4Color}" />
+  <Color x:Key="Chart5Color">#D55181</Color>
+  <SolidColorBrush x:Key="Chart5Brush" Color="{StaticResource Chart5Color}" />
+  <Color x:Key="Chart6Color">#008300</Color>
+  <SolidColorBrush x:Key="Chart6Brush" Color="{StaticResource Chart6Color}" />
+  <Color x:Key="Chart7Color">#9085E9</Color>
+  <SolidColorBrush x:Key="Chart7Brush" Color="{StaticResource Chart7Color}" />
+  <Color x:Key="Chart8Color">#E66767</Color>
+  <SolidColorBrush x:Key="Chart8Brush" Color="{StaticResource Chart8Color}" />
+</ResourceDictionary>
