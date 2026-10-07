@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>FTC.TeamDesk.Services</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FTC.TeamDesk.Core\FTC.TeamDesk.Core.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Security\FTC.TeamDesk.Security.csproj" />
+  </ItemGroup>
+</Project>
