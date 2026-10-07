@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.0.0</Version>
+    <NoWarn>$(NoWarn);CA1716;CA1000</NoWarn>
+    <Authors>FTC TeamDesk contributors</Authors>
+    <Product>FTC TeamDesk</Product>
+    <Copyright>Copyright (c) 2026 FTC TeamDesk contributors</Copyright>
+    <RepositoryUrl>https://github.com/Orevian/FTC-TeamDesk</RepositoryUrl>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+</Project>
