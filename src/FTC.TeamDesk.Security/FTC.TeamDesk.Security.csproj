@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>FTC.TeamDesk.Security</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FTC.TeamDesk.Core\FTC.TeamDesk.Core.csproj" />
+  </ItemGroup>
+  <!-- DPAPI is Windows-only and ships as a NuGet package. NoDpapi=true lets CI on non-Windows runners compile the rest. -->
+  <ItemGroup Condition="'$(NoDpapi)' != 'true'">
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(NoDpapi)' == 'true'">
+    <Compile Remove="DpapiSecretStore.cs" />
+  </ItemGroup>
+</Project>
