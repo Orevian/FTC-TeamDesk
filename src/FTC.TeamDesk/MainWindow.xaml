@@ -1,0 +1,146 @@
+<Window x:Class="FTC.TeamDesk.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:FTC.TeamDesk.UI.Localization;assembly=FTC.TeamDesk.UI"
+        xmlns:h="clr-namespace:FTC.TeamDesk.UI.Helpers;assembly=FTC.TeamDesk.UI"
+        Title="FTC TeamDesk" Width="1360" Height="840" MinWidth="1080" MinHeight="680"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanResize"
+        Background="{DynamicResource AppBgBrush}" Foreground="{DynamicResource TextBrush}"
+        FontFamily="{StaticResource UiFont}" FontSize="13" UseLayoutRounding="True" TextOptions.TextFormattingMode="Ideal">
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="40" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False" />
+  </WindowChrome.WindowChrome>
+
+  <Window.InputBindings>
+    <KeyBinding Key="D1" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="dashboard" />
+    <KeyBinding Key="D2" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="team" />
+    <KeyBinding Key="D3" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="applications" />
+    <KeyBinding Key="D4" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="budget" />
+    <KeyBinding Key="D5" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="analytics" />
+    <KeyBinding Key="D6" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="vault" />
+    <KeyBinding Key="D7" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="assistant" />
+    <KeyBinding Key="D8" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="settings" />
+    <KeyBinding Key="N" Modifiers="Control" Command="{Binding PrimaryActionCommand}" />
+    <KeyBinding Key="L" Modifiers="Control" Command="{Binding LockVaultCommand}" />
+    <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+  </Window.InputBindings>
+
+  <Grid x:Name="Root">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="40" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- Title bar -->
+    <Grid Background="{DynamicResource SidebarBgBrush}">
+      <Border VerticalAlignment="Bottom" Height="1" Background="{DynamicResource BorderBrush}" />
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
+        <Image x:Name="TitleIcon" Width="18" Height="18" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality" Visibility="Collapsed" />
+        <TextBlock Text="FTC TeamDesk" FontWeight="SemiBold" VerticalAlignment="Center" />
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+        <Button Style="{StaticResource IconButton}" Width="46" Height="40" Content="&#xE72E;" Command="{Binding LockVaultCommand}" ToolTip="{loc:Loc Vault.Lock}" AutomationProperties.Name="Lock vault" />
+        <Button Style="{StaticResource IconButton}" Width="46" Height="40" Content="&#xE706;" Command="{Binding ToggleThemeCommand}" ToolTip="{loc:Loc Settings.Theme}" AutomationProperties.Name="Toggle theme" />
+        <Button x:Name="MinButton" Style="{StaticResource IconButton}" Width="46" Height="40" Content="&#xE921;" AutomationProperties.Name="Minimize" />
+        <Button x:Name="MaxButton" Style="{StaticResource IconButton}" Width="46" Height="40" Content="&#xE922;" AutomationProperties.Name="Maximize" />
+        <Button x:Name="CloseButton" Style="{StaticResource IconButton}" Width="46" Height="40" Content="&#xE8BB;" AutomationProperties.Name="Close" />
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="232" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <!-- Sidebar -->
+      <Border Background="{DynamicResource SidebarBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0" IsEnabled="{Binding IsDialogOpen, Converter={StaticResource InvBool}}">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Bottom" Text="v1.0" Style="{StaticResource TextCaption}" Margin="20,0,0,16" />
+          <ItemsControl ItemsSource="{Binding Nav}" Margin="0,16,0,0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Style="{StaticResource NavButton}" h:NavState.IsActive="{Binding IsActive}" ToolTip="{Binding Tooltip}" AutomationProperties.Name="{Binding Label}"
+                        Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Section}">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Glyph}" FontFamily="{StaticResource IconFont}" FontSize="16" Width="24" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding Label}" FontSize="13.5" Margin="10,0,0,0" VerticalAlignment="Center" />
+                  </StackPanel>
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </DockPanel>
+      </Border>
+
+      <!-- Page -->
+      <ContentControl Grid.Column="1" Content="{Binding Page}" IsTabStop="False" IsEnabled="{Binding IsDialogOpen, Converter={StaticResource InvBool}}" />
+
+      <!-- Toast -->
+      <Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,24,24" MaxWidth="440" CornerRadius="8" Padding="16,12"
+              BorderThickness="1" Visibility="{Binding Toasts.IsVisible, Converter={StaticResource BoolToVis}}" AutomationProperties.LiveSetting="Polite">
+        <Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.25" Color="Black" /></Border.Effect>
+        <Border.Style>
+          <Style TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding Toasts.Kind}" Value="Success"><Setter Property="BorderBrush" Value="{DynamicResource SuccessBrush}" /></DataTrigger>
+              <DataTrigger Binding="{Binding Toasts.Kind}" Value="Warning"><Setter Property="BorderBrush" Value="{DynamicResource WarningBrush}" /></DataTrigger>
+              <DataTrigger Binding="{Binding Toasts.Kind}" Value="Error"><Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}" /></DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </Border.Style>
+        <Grid>
+          <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding Toasts.Message}" TextWrapping="Wrap" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Style="{StaticResource IconButton}" Width="28" Height="28" Margin="10,-4,-6,-4" Content="&#xE711;" FontSize="11" Command="{Binding DismissToastCommand}" AutomationProperties.Name="Dismiss" />
+        </Grid>
+      </Border>
+
+      <!-- Dialog overlay -->
+      <Grid Grid.ColumnSpan="2" Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVis}}">
+        <Rectangle Fill="{DynamicResource ScrimBrush}" />
+        <ContentControl x:Name="DialogHost" Content="{Binding Dialogs.Current}" HorizontalAlignment="Center" VerticalAlignment="Center" IsTabStop="False" KeyboardNavigation.TabNavigation="Cycle">
+          <ContentControl.ContentTemplate>
+            <DataTemplate>
+              <Grid Width="{Binding Width}" MaxHeight="760">
+              <!-- The shadow lives on its own empty layer: an Effect on the container would re-render the blur over all live inputs on every keystroke / caret blink. -->
+              <Border CornerRadius="12" Background="{DynamicResource SurfaceBrush}" IsHitTestVisible="False" Margin="2">
+                <Border.Effect><DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.30" Color="Black" RenderingBias="Performance" /></Border.Effect>
+              </Border>
+              <Border CornerRadius="12" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1"
+                      AutomationProperties.Name="{Binding Title}">
+                <Grid>
+                  <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                  <TextBlock Text="{Binding Title}" Style="{StaticResource TextH2}" FontSize="17" Margin="24,20,24,12" />
+                  <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0">
+                    <StackPanel Margin="24,4,24,20">
+                      <ContentPresenter Content="{Binding}" />
+                      <Border Margin="0,14,0,0" CornerRadius="6" Padding="12,10" Background="{DynamicResource DangerSoftBrush}" Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="{Binding Error}" TextWrapping="Wrap" Foreground="{DynamicResource DangerBrush}" FontWeight="SemiBold" />
+                      </Border>
+                    </StackPanel>
+                  </ScrollViewer>
+                  <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="24,14">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                      <Button Content="{Binding CancelText}" Command="{Binding CancelCommand}" IsCancel="True" Margin="0,0,10,0" Visibility="{Binding ShowCancel, Converter={StaticResource BoolToVis}}" MinWidth="88" />
+                      <Button Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" MinWidth="88">
+                        <Button.Style>
+                          <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                            <Style.Triggers><DataTrigger Binding="{Binding IsDestructive}" Value="True"><Setter Property="Background" Value="{DynamicResource DangerBrush}" /><Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}" /><Setter Property="Foreground" Value="White" /></DataTrigger></Style.Triggers>
+                          </Style>
+                        </Button.Style>
+                      </Button>
+                    </StackPanel>
+                  </Border>
+                </Grid>
+              </Border>
+              </Grid>
+            </DataTemplate>
+          </ContentControl.ContentTemplate>
+        </ContentControl>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>
