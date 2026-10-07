@@ -1,0 +1,13 @@
+﻿FTC TeamDesk - Önemli bilgiler
+
+SORUMLULUK REDDİ
+FTC TeamDesk bağımsız, topluluk tarafından geliştirilen, açık kaynaklı bir projedir. FIRST(R) veya FIRST Tech Challenge ile BAĞLANTISI YOKTUR; onlar tarafından onaylanmamış veya desteklenmemiştir. MIT Lisansı kapsamında, hiçbir garanti verilmeksizin "OLDUĞU GİBİ" sunulur. Kullanım riski size aittir; geliştiriciler veri kaybından veya zarardan sorumlu tutulamaz.
+
+BU BİR VİRÜS DEĞİLDİR
+FTC TeamDesk zararlı yazılım değildir. Telemetri yoktur, sizinle ilgili veri toplamaz ve kendiliğinden hiçbir yere veri göndermez. İnternete yalnızca SİZ Google Sheets veya bir yapay zekâ sağlayıcısı ayarlarsanız bağlanır. Kaynak kodun tamamı herkese açıktır; okuyabilir veya programı kendiniz derleyebilirsiniz.
+
+Windows SmartScreen veya antivirüsünüz yeni ve imzasız bir program için uyarı verebilir. Bu, ücretli kod imzalama sertifikasının olmamasından kaynaklanan bir "yanlış alarm"dır - "Ek bilgi" > "Yine de çalıştır" seçeneğini kullanın.
+
+ÖNEMLİ
+- Şifre Kasası ana şifresini unutursanız kasa geri getirilemez. Bu bilinçli bir güvenlik tasarımıdır.
+- Düzenli yedek alın (Ayarlar > Veri).

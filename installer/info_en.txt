@@ -1,0 +1,13 @@
+﻿FTC TeamDesk - Important information
+
+DISCLAIMER
+FTC TeamDesk is an independent, community-made, open-source project. It is NOT affiliated with, endorsed by or sponsored by FIRST(R) or the FIRST Tech Challenge. It is provided "AS IS" under the MIT License, without warranty of any kind. You use it at your own risk; the authors are not liable for any data loss or damage.
+
+THIS IS NOT A VIRUS
+FTC TeamDesk is not malware. It has no telemetry, collects no data about you and sends nothing anywhere on its own. It only contacts the internet if YOU configure Google Sheets or an AI provider. The complete source code is public, so you can read it or build the program yourself.
+
+Windows SmartScreen or your antivirus may warn about a new, unsigned program. This is a "false positive" caused by the missing paid code-signing certificate - choose "More info" > "Run anyway".
+
+IMPORTANT
+- If you forget the Password Vault master password, the vault cannot be recovered. This is by design.
+- Make regular backups (Settings > Data).
