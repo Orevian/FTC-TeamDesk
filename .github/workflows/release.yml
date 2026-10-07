@@ -1,0 +1,72 @@
+name: release
+
+# Push a version tag (for example  v1.0.0 ) and this workflow builds the app, creates the Inno Setup installer
+# and publishes it on the GitHub Releases page together with its SHA-256 checksum and release-readme.md.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version without "v" (manual run only, e.g. 1.0.0)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Work out the version
+        id: ver
+        shell: pwsh
+        run: |
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') { $v = '${{ inputs.version }}' } else { $v = '${{ github.ref_name }}'.TrimStart('v') }
+          "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Restore, build and test
+        run: |
+          dotnet restore
+          dotnet build -c Release --no-restore
+          dotnet test -c Release --no-build
+
+      - name: Publish the app (self-contained, onedir)
+        run: dotnet publish src/FTC.TeamDesk -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:DebugType=none -p:Version=${{ steps.ver.outputs.version }} -o publish
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build the installer
+        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /DAppVersion=${{ steps.ver.outputs.version }} setup.iss'
+
+      - name: Checksum and release notes
+        id: notes
+        shell: pwsh
+        run: |
+          $file = "installer\output\FTC-TeamDesk-Setup-${{ steps.ver.outputs.version }}.exe"
+          $hash = (Get-FileHash $file -Algorithm SHA256).Hash.ToLower()
+          "$hash  $(Split-Path $file -Leaf)" | Out-File "installer\output\SHA256SUMS.txt" -Encoding ascii
+          $body = Get-Content release-readme.md -Raw -Encoding utf8
+          $body = $body -replace '(?s)<!--.*?-->\s*', ''
+          $body = $body -replace '1\.0\.0', '${{ steps.ver.outputs.version }}'
+          $body = $body.Replace('<paste checksum here>', $hash).Replace('<sağlama toplamını buraya yapıştırın>', $hash)
+          $body = $body -replace ' · \[VirusTotal[^\r\n]*', ''
+          Set-Content release-body.md $body -Encoding utf8
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+
+      - name: Publish the GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: FTC TeamDesk ${{ steps.ver.outputs.version }}
+          body_path: release-body.md
+          files: |
+            installer/output/FTC-TeamDesk-Setup-${{ steps.ver.outputs.version }}.exe
+            installer/output/SHA256SUMS.txt
