@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>FTC.TeamDesk</RootNamespace>
+    <AssemblyName>FTC.TeamDesk</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <SatelliteResourceLanguages>en;tr</SatelliteResourceLanguages>
+    <Product>FTC TeamDesk</Product>
+    <Company>FTC TeamDesk contributors</Company>
+    <Copyright>MIT License</Copyright>
+  </PropertyGroup>
+
+  <!-- Your icon: put icon.ico in src/FTC.TeamDesk/Assets/. It is used as the .exe icon, the window icon and the title-bar icon. -->
+  <PropertyGroup Condition="Exists('Assets\icon.ico')">
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('Assets\icon.ico')">
+    <Resource Include="Assets\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FTC.TeamDesk.Core\FTC.TeamDesk.Core.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Data\FTC.TeamDesk.Data.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Services\FTC.TeamDesk.Services.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.AI\FTC.TeamDesk.AI.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Security\FTC.TeamDesk.Security.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Localization\FTC.TeamDesk.Localization.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.UI\FTC.TeamDesk.UI.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- WPF SDK removes these from ImplicitUsings; restore them. -->
+    <Using Include="System.IO" />
+    <Using Include="System.Net.Http" />
+  </ItemGroup>
+</Project>
