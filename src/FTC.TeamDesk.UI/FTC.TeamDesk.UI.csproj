@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>FTC.TeamDesk.UI</RootNamespace>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FTC.TeamDesk.Core\FTC.TeamDesk.Core.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Localization\FTC.TeamDesk.Localization.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.Security\FTC.TeamDesk.Security.csproj" />
+    <ProjectReference Include="..\FTC.TeamDesk.AI\FTC.TeamDesk.AI.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- WPF SDK removes these from ImplicitUsings; restore them. -->
+    <Using Include="System.IO" />
+    <Using Include="System.Net.Http" />
+  </ItemGroup>
+</Project>
