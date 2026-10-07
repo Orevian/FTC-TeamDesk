@@ -1,0 +1,146 @@
+<UserControl x:Class="FTC.TeamDesk.UI.Views.Pages.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:FTC.TeamDesk.UI.Localization"
+             xmlns:ctl="clr-namespace:FTC.TeamDesk.UI.Controls"
+             xmlns:h="clr-namespace:FTC.TeamDesk.UI.Helpers"
+             xmlns:ui="clr-namespace:FTC.TeamDesk.UI">
+  <ScrollViewer Style="{StaticResource PageScroll}">
+    <StackPanel Margin="32,28,32,32">
+      <Grid Margin="0,0,0,20">
+        <StackPanel>
+          <TextBlock Text="{loc:Loc Nav.Dashboard}" Style="{StaticResource TextTitle}" />
+          <TextBlock Text="{loc:Loc Dashboard.Subtitle}" Style="{StaticResource TextCaption}" Margin="0,4,0,0" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+          <Button Style="{StaticResource IconButton}" Content="&#xE72C;" Command="{Binding RefreshCommand}" ToolTip="{loc:Loc Common.Refresh}" AutomationProperties.Name="Refresh" />
+          <Button Style="{StaticResource PrimaryButton}" Command="{Binding AddTaskCommand}" Content="{loc:Loc Task.New}" Margin="8,0,0,0" />
+        </StackPanel>
+      </Grid>
+
+      <!-- KPI strip: 8 figures in one bordered surface separated by hairlines -->
+      <Border Style="{StaticResource Panel}" Padding="0" ClipToBounds="True">
+        <ItemsControl ItemsSource="{Binding Kpis}" Margin="0,0,-1,-1">
+          <ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,1" Padding="20,16">
+                <StackPanel>
+                  <TextBlock Text="{Binding Label}" Style="{StaticResource TextCaption}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Text="{Binding Value}" Style="{StaticResource TextKpi}" Margin="0,4,0,0">
+                    <TextBlock.Resources>
+                      <Style TargetType="TextBlock" BasedOn="{StaticResource TextKpi}">
+                        <Style.Triggers>
+                          <DataTrigger Binding="{Binding Tone}" Value="Danger"><Setter Property="Foreground" Value="{DynamicResource DangerBrush}" /></DataTrigger>
+                          <DataTrigger Binding="{Binding Tone}" Value="Warning"><Setter Property="Foreground" Value="{DynamicResource WarningBrush}" /></DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </TextBlock.Resources>
+                  </TextBlock>
+                  <TextBlock Text="{Binding Hint}" Style="{StaticResource TextCaption}" Visibility="{Binding Hint, Converter={StaticResource NullToVis}}" />
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Border>
+
+      <Grid Margin="0,20,0,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="3*" />
+          <ColumnDefinition Width="20" />
+          <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+          <Border Style="{StaticResource Panel}">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Dashboard.RecentApplications}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <ItemsControl ItemsSource="{Binding RecentApplications}" ItemTemplate="{StaticResource ListRowTemplate}" />
+              <TextBlock Text="{loc:Loc Common.NoData}" Margin="0,8">
+                <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource TextCaption}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers>
+                  <DataTrigger Binding="{Binding RecentApplications.Count}" Value="0"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Dashboard.RecentPurchases}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <ItemsControl ItemsSource="{Binding RecentPurchases}" ItemTemplate="{StaticResource ListRowTemplate}" />
+              <TextBlock Text="{loc:Loc Common.NoData}" Margin="0,8">
+                <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource TextCaption}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers>
+                  <DataTrigger Binding="{Binding RecentPurchases.Count}" Value="0"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Dashboard.RecentActivity}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <ItemsControl ItemsSource="{Binding Activity}" ItemTemplate="{StaticResource ListRowTemplate}" />
+              <TextBlock Text="{loc:Loc Common.NoData}" Margin="0,8">
+                <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource TextCaption}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers>
+                  <DataTrigger Binding="{Binding HasActivity}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2">
+          <Border Style="{StaticResource Panel}">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Dashboard.BudgetSummary}" Style="{StaticResource TextH2}" />
+              <TextBlock Text="{Binding BudgetText}" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,10" />
+              <ctl:SegmentBar Items="{Binding BudgetSegments}" Height="14" />
+              <ItemsControl ItemsSource="{Binding BudgetSegments}" ItemTemplate="{StaticResource LegendTemplate}" Margin="0,12,0,0" />
+              <TextBlock Text="{Binding BudgetNote}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,8,0,0" />
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Dashboard.MemberDistribution}" Style="{StaticResource TextH2}" Margin="0,0,0,12" />
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="140" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <ctl:DonutChart Items="{Binding MemberDistribution}" Width="130" Height="130" CenterText="{Binding Kpis[0].Value}" CenterCaption="{loc:Loc Nav.Team}" HorizontalAlignment="Left" />
+                <ItemsControl Grid.Column="1" ItemsSource="{Binding MemberDistribution}" ItemTemplate="{StaticResource LegendTemplate}" VerticalAlignment="Center" />
+              </Grid>
+            </StackPanel>
+          </Border>
+          <Border Style="{StaticResource Panel}" Margin="0,20,0,0">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Dashboard.UpcomingTasks}" Style="{StaticResource TextH2}" Margin="0,0,0,8" />
+              <ItemsControl ItemsSource="{Binding Tasks}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Grid MinHeight="40" Background="Transparent" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                      <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                      <Grid.ContextMenu>
+                        <ContextMenu>
+                          <MenuItem Header="{loc:Loc Common.Edit}" Command="{Binding PlacementTarget.Tag.EditTaskCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding}" />
+                          <MenuItem Header="{loc:Loc Common.Delete}" Command="{Binding PlacementTarget.Tag.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding}" />
+                        </ContextMenu>
+                      </Grid.ContextMenu>
+                      <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsDone, Mode=OneWay}"
+                                Command="{Binding DataContext.ToggleTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                      <TextBlock Grid.Column="1" Text="{Binding Title}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="4,0" />
+                      <TextBlock Grid.Column="2" Text="{Binding DueText}" VerticalAlignment="Center" Style="{StaticResource TextCaption}">
+                        <TextBlock.Resources>
+                          <Style TargetType="TextBlock" BasedOn="{StaticResource TextCaption}">
+                            <Style.Triggers><DataTrigger Binding="{Binding IsOverdue}" Value="True"><Setter Property="Foreground" Value="{DynamicResource DangerBrush}" /></DataTrigger></Style.Triggers>
+                          </Style>
+                        </TextBlock.Resources>
+                      </TextBlock>
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <TextBlock Text="{loc:Loc Task.None}" Margin="0,4">
+                <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource TextCaption}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers>
+                  <DataTrigger Binding="{Binding HasTasks}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
