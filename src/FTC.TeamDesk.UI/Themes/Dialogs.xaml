@@ -1,0 +1,200 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:loc="clr-namespace:FTC.TeamDesk.UI.Localization"
+                    xmlns:ctl="clr-namespace:FTC.TeamDesk.UI.Controls"
+                    xmlns:h="clr-namespace:FTC.TeamDesk.UI.Helpers"
+                    xmlns:dlg="clr-namespace:FTC.TeamDesk.UI.ViewModels.Dialogs"
+                    xmlns:dash="clr-namespace:FTC.TeamDesk.UI.ViewModels.Dashboard"
+                    xmlns:team="clr-namespace:FTC.TeamDesk.UI.ViewModels.Team"
+                    xmlns:bud="clr-namespace:FTC.TeamDesk.UI.ViewModels.Budget"
+                    xmlns:vlt="clr-namespace:FTC.TeamDesk.UI.ViewModels.Vault"
+                    xmlns:ast="clr-namespace:FTC.TeamDesk.UI.ViewModels.Assistant"
+                    xmlns:set="clr-namespace:FTC.TeamDesk.UI.ViewModels.Settings">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="Base.xaml" />
+    <ResourceDictionary Source="Controls.xaml" />
+    <ResourceDictionary Source="Shared.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+
+
+
+  <DataTemplate DataType="{x:Type dlg:ConfirmDialogViewModel}">
+    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondaryBrush}" />
+  </DataTemplate>
+
+<DataTemplate DataType="{x:Type dash:TaskDialogViewModel}"><StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Task.Field.Title}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding TaskTitle, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Task.Field.Due}" Style="{StaticResource FieldLabel}" /><DatePicker SelectedDate="{Binding DueDate}" /></StackPanel><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Task.Field.Notes}" Style="{StaticResource FieldLabel}" /><TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" /></StackPanel></StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type team:RecordDialogViewModel}"><StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Member.Area}" Style="{StaticResource FieldLabel}" /><ComboBox ItemsSource="{Binding AreaOptions}" SelectedItem="{Binding Area}" DisplayMemberPath="Label" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Common.Date}" Style="{StaticResource FieldLabel}" /><DatePicker SelectedDate="{Binding Date}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Member.Score}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Score, UpdateSourceTrigger=LostFocus}" ToolTip="1-10" /></StackPanel><TextBlock Text="{loc:Loc Team.Record.ScoreHint}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,-8,0,14" /><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Member.Note}" Style="{StaticResource FieldLabel}" /><TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" /></StackPanel></StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type team:MemberEditDialogViewModel}"><StackPanel>
+  <Grid Margin="0,0,0,16">
+    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+    <ctl:Avatar Initials="{Binding FullName, Converter={StaticResource InitialsOf}}" Tone="0" ImagePath="{Binding AvatarPath}" Diameter="56" />
+    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="14,0,0,0" VerticalAlignment="Center">
+      <Button Command="{Binding PickAvatarCommand}" Content="{loc:Loc Team.Avatar.Pick}" />
+      <Button Style="{StaticResource GhostButton}" Command="{Binding RemoveAvatarCommand}" Content="{loc:Loc Team.Avatar.Remove}" Visibility="{Binding HasAvatar, Converter={StaticResource BoolToVis}}" />
+    </StackPanel>
+  </Grid>
+  <Grid>
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="14" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+    <StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Name}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Email}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Status}" Style="{StaticResource FieldLabel}" /><ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding Status}" DisplayMemberPath="Label" /></StackPanel></StackPanel>
+    <StackPanel Grid.Column="2"><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Phone}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Joined}" Style="{StaticResource FieldLabel}" /><DatePicker SelectedDate="{Binding JoinDate}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Skills}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Skills, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Loc Team.Field.Skills.Hint}" /></StackPanel></StackPanel>
+  </Grid>
+  <TextBlock Text="{loc:Loc Team.Field.Areas}" Style="{StaticResource FieldLabel}" />
+  <ItemsControl ItemsSource="{Binding Areas}" Margin="0,0,0,6">
+    <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+    <ItemsControl.ItemTemplate><DataTemplate><CheckBox Content="{Binding Label}" IsChecked="{Binding IsChecked}" Margin="0,0,18,8" /></DataTemplate></ItemsControl.ItemTemplate>
+  </ItemsControl>
+  <Grid Margin="0,0,0,14">
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+    <TextBox Text="{Binding NewArea, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Loc Team.Field.NewArea}" />
+    <Button Grid.Column="1" Margin="8,0,0,0" Command="{Binding AddAreaCommand}" Content="{loc:Loc Team.Field.AddArea}" />
+  </Grid><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Responsibilities}" Style="{StaticResource FieldLabel}" /><TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Responsibilities, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Team.Field.Notes}" Style="{StaticResource FieldLabel}" /><TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" /></StackPanel>
+  <TextBlock Text="{loc:Loc Team.Field.Custom}" Style="{StaticResource FieldLabel}" />
+  <ItemsControl ItemsSource="{Binding CustomFields}">
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Grid Margin="0,0,0,8">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="160" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+          <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Loc Team.Field.Custom.Name}" />
+          <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Loc Team.Field.Custom.Value}" />
+          <Button Grid.Column="2" Style="{StaticResource IconButton}" Content="&#xE711;" Command="{Binding DataContext.RemoveFieldCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" ToolTip="{loc:Loc Common.Delete}" AutomationProperties.Name="Remove field" />
+        </Grid>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+  <Button HorizontalAlignment="Left" Style="{StaticResource GhostButton}" Command="{Binding AddFieldCommand}" Content="{loc:Loc Team.Field.Custom.Add}" />
+</StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type team:StatusManagerDialogViewModel}"><StackPanel>
+  <TextBlock Text="{loc:Loc Team.Statuses.Hint}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,0,0,12" />
+  <ItemsControl ItemsSource="{Binding Rows}">
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Grid Margin="0,0,0,8" MinHeight="32">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+          <Ellipse Width="10" Height="10" Fill="{Binding Color, Converter={StaticResource HexToBrush}}" VerticalAlignment="Center" />
+          <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="10,0" VerticalAlignment="Center" />
+          <Button Grid.Column="2" Content="&#xE74D;" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" ToolTip="{loc:Loc Common.Delete}" AutomationProperties.Name="Delete status">
+            <Button.Style><Style TargetType="Button" BasedOn="{StaticResource IconButton}"><Style.Triggers><DataTrigger Binding="{Binding IsSystem}" Value="True"><Setter Property="Visibility" Value="Collapsed" /></DataTrigger></Style.Triggers></Style></Button.Style>
+          </Button>
+        </Grid>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+  <Border Style="{StaticResource Divider}" />
+  <TextBlock Text="{loc:Loc Team.Statuses.Add}" Style="{StaticResource FieldLabel}" />
+  <Grid>
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="160" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+    <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" />
+    <ComboBox Grid.Column="1" Margin="8,0,0,0" ItemsSource="{Binding Colors}" SelectedItem="{Binding NewColor}">
+      <ComboBox.ItemTemplate><DataTemplate><StackPanel Orientation="Horizontal"><Ellipse Width="12" Height="12" Fill="{Binding Converter={StaticResource HexToBrush}}" /><TextBlock Text="{Binding}" Margin="8,0,0,0" /></StackPanel></DataTemplate></ComboBox.ItemTemplate>
+    </ComboBox>
+    <Button Grid.Column="2" Margin="8,0,0,0" Command="{Binding AddCommand}" Content="{loc:Loc Common.Add}" />
+  </Grid>
+</StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type bud:PurchaseDialogViewModel}"><StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Budget.Field.Product}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Product, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><Grid Margin="0,0,0,14"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="14" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><StackPanel><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Budget.Field.Category}" Style="{StaticResource FieldLabel}" /><ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding Category}" DisplayMemberPath="Label" /></StackPanel></StackPanel><StackPanel Grid.Column="2"><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Budget.Field.Status}" Style="{StaticResource FieldLabel}" /><ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding Status}" DisplayMemberPath="Label" /></StackPanel></StackPanel></Grid><Grid Margin="0,0,0,14"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="14" /><ColumnDefinition Width="100" /><ColumnDefinition Width="14" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><StackPanel><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Budget.Field.UnitPrice}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" /></StackPanel></StackPanel><StackPanel Grid.Column="2"><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Budget.Field.Quantity}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" /></StackPanel></StackPanel><StackPanel Grid.Column="4"><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Common.Date}" Style="{StaticResource FieldLabel}" /><DatePicker SelectedDate="{Binding Date}" /></StackPanel></StackPanel></Grid><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Budget.Field.Seller}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Seller, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Budget.Field.Notes}" Style="{StaticResource FieldLabel}" /><TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><Border CornerRadius="8" Padding="14,12" Background="{DynamicResource HoverBrush}">
+    <StackPanel>
+      <TextBlock Text="{loc:Loc Budget.WhatIf}" Style="{StaticResource TextLabel}" />
+      <TextBlock Text="{Binding ImpactText}" FontWeight="SemiBold" />
+      <TextBlock Text="{Binding AfterText}" TextWrapping="Wrap" Margin="0,2,0,0">
+        <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" /><Style.Triggers><DataTrigger Binding="{Binding IsOverBudget}" Value="True"><Setter Property="Foreground" Value="{DynamicResource WarningBrush}" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+      </TextBlock>
+    </StackPanel>
+  </Border></StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type bud:BudgetSettingsDialogViewModel}"><StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Budget.Field.TotalBudget}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Total, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Budget.Field.Currency}" Style="{StaticResource FieldLabel}" /><ComboBox ItemsSource="{Binding Currencies}" SelectedItem="{Binding Currency}" /></StackPanel></StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type bud:CategoryManagerDialogViewModel}"><StackPanel>
+  <TextBlock Text="{loc:Loc Budget.Categories.Hint}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,0,0,12" />
+  <ItemsControl ItemsSource="{Binding Rows}">
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Grid Margin="0,0,0,8">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="150" /><ColumnDefinition Width="40" /></Grid.ColumnDefinitions>
+          <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsSystem}" AutomationProperties.Name="Category name" />
+          <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Planned amount" />
+          <Button Grid.Column="2" Content="&#xE74D;" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" ToolTip="{loc:Loc Common.Delete}" AutomationProperties.Name="Delete category">
+            <Button.Style><Style TargetType="Button" BasedOn="{StaticResource IconButton}"><Style.Triggers><DataTrigger Binding="{Binding IsSystem}" Value="True"><Setter Property="Visibility" Value="Hidden" /></DataTrigger></Style.Triggers></Style></Button.Style>
+          </Button>
+        </Grid>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+  <Border Style="{StaticResource Divider}" />
+  <TextBlock Text="{loc:Loc Budget.Categories.Add}" Style="{StaticResource FieldLabel}" />
+  <Grid>
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+    <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" />
+    <Button Grid.Column="1" Margin="8,0,0,0" Command="{Binding AddCommand}" Content="{loc:Loc Common.Add}" />
+  </Grid>
+</StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type vlt:VaultItemDialogViewModel}"><StackPanel><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Vault.Field.Title}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding ItemTitle, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><Grid Margin="0,0,0,14"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="14" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><StackPanel><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Vault.Field.Username}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" /></StackPanel></StackPanel><StackPanel Grid.Column="2"><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Vault.Field.Category}" Style="{StaticResource FieldLabel}" /><ComboBox ItemsSource="{Binding CategoryOptions}" SelectedValuePath="Value" SelectedValue="{Binding Category}" DisplayMemberPath="Label" /></StackPanel></StackPanel></Grid><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Vault.Field.Url}" Style="{StaticResource FieldLabel}" /><TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" /></StackPanel><TextBlock Text="{loc:Loc Vault.Field.Password}" Style="{StaticResource FieldLabel}" />
+  <Grid>
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+    <PasswordBox h:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Password" Visibility="{Binding ShowPassword, Converter={StaticResource InvBoolToVis}}" />
+    <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" FontFamily="{StaticResource MonoFont}" AutomationProperties.Name="Password (visible)" Visibility="{Binding ShowPassword, Converter={StaticResource BoolToVis}}" />
+    <CheckBox Grid.Column="1" Margin="10,0,0,0" IsChecked="{Binding ShowPassword}" Content="{loc:Loc Vault.ShowPassword}" VerticalAlignment="Center" />
+  </Grid>
+  <TextBlock Text="{loc:Loc Vault.KeepPasswordHint}" Style="{StaticResource TextCaption}" Margin="0,4,0,0" Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}" />
+  <ProgressBar Style="{StaticResource StrengthBar}" Value="{Binding StrengthScore, Mode=OneWay}" Maximum="4" Margin="0,8,0,2" />
+  <TextBlock Text="{Binding StrengthText}" Style="{StaticResource TextCaption}" Margin="0,0,0,14" />
+  <Border CornerRadius="8" Padding="14,12" Background="{DynamicResource HoverBrush}" Margin="0,0,0,14">
+    <StackPanel>
+      <TextBlock Text="{loc:Loc Vault.Generator}" Style="{StaticResource TextLabel}" />
+      <Grid Margin="0,0,0,8">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="70" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+        <TextBlock Text="{loc:Loc Vault.Generator.Length}" VerticalAlignment="Center" Margin="0,0,10,0" />
+        <TextBox Grid.Column="1" Text="{Binding Length, UpdateSourceTrigger=LostFocus}" />
+        <Button Grid.Column="2" HorizontalAlignment="Right" Command="{Binding GenerateCommand}" Content="{loc:Loc Vault.Generator.Generate}" />
+      </Grid>
+      <WrapPanel>
+        <CheckBox Content="a-z" IsChecked="{Binding Lower}" Margin="0,0,16,4" />
+        <CheckBox Content="A-Z" IsChecked="{Binding Upper}" Margin="0,0,16,4" />
+        <CheckBox Content="0-9" IsChecked="{Binding Digits}" Margin="0,0,16,4" />
+        <CheckBox Content="!@#" IsChecked="{Binding Symbols}" Margin="0,0,16,4" />
+        <CheckBox Content="{loc:Loc Vault.Generator.Ambiguous}" IsChecked="{Binding AvoidAmbiguous}" Margin="0,0,0,4" />
+      </WrapPanel>
+    </StackPanel>
+  </Border><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Vault.Field.Notes}" Style="{StaticResource FieldLabel}" /><TextBox Style="{StaticResource MultiLineBox}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" /></StackPanel></StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type vlt:ChangeMasterDialogViewModel}"><StackPanel><TextBlock Text="{loc:Loc Vault.ChangeMaster.Hint}" Style="{StaticResource TextCaption}" TextWrapping="Wrap" Margin="0,0,0,14" /><StackPanel Margin="0,0,0,14"><TextBlock Text="{loc:Loc Vault.ChangeMaster.Current}" Style="{StaticResource FieldLabel}" /><PasswordBox h:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Current master password" /></StackPanel><StackPanel Margin="0,0,0,4"><TextBlock Text="{loc:Loc Vault.ChangeMaster.New}" Style="{StaticResource FieldLabel}" /><PasswordBox h:PasswordBoxHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="New master password" /></StackPanel><ProgressBar Style="{StaticResource StrengthBar}" Value="{Binding StrengthScore, Mode=OneWay}" Maximum="4" Margin="0,6,0,2" /><TextBlock Text="{Binding StrengthText}" Style="{StaticResource TextCaption}" Margin="0,0,0,14" /><StackPanel Margin="0,0,0,0"><TextBlock Text="{loc:Loc Vault.ConfirmPassword}" Style="{StaticResource FieldLabel}" /><PasswordBox h:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Confirm new master password" /></StackPanel></StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type ast:ActionRequestDialogViewModel}"><StackPanel>
+  <TextBlock Text="{Binding Intro}" Style="{StaticResource TextSecondary}" TextWrapping="Wrap" Margin="0,0,0,12" />
+  <Border CornerRadius="8" Padding="16,14" Background="{DynamicResource HoverBrush}">
+    <StackPanel>
+      <TextBlock Text="{Binding ActionName}" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,10" />
+      <ItemsControl ItemsSource="{Binding Fields}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid Margin="0,0,0,6">
+              <Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+              <TextBlock Text="{Binding Label}" Style="{StaticResource TextCaption}" />
+              <TextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      <Grid Margin="0,8,0,0" Visibility="{Binding HasBudgetImpact, Converter={StaticResource BoolToVis}}">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding BudgetImpactLabel}" Style="{StaticResource TextCaption}" />
+        <TextBlock Grid.Column="1" Text="{Binding BudgetImpact}" FontWeight="SemiBold" />
+      </Grid>
+    </StackPanel>
+  </Border>
+  <Border CornerRadius="8" Padding="14,10" Margin="0,12,0,0" Background="{DynamicResource DangerSoftBrush}" Visibility="{Binding HasWarning, Converter={StaticResource BoolToVis}}">
+    <TextBlock Text="{Binding Warning}" Foreground="{DynamicResource DangerBrush}" TextWrapping="Wrap" FontWeight="SemiBold" />
+  </Border>
+</StackPanel></DataTemplate>
+<DataTemplate DataType="{x:Type set:ActivityLogDialogViewModel}"><StackPanel>
+  <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" ToolTip="{loc:Loc Common.Search}" AutomationProperties.Name="Search activity" />
+  <DataGrid ItemsSource="{Binding Rows}" MaxHeight="400" RowHeight="38">
+    <DataGrid.Columns>
+      <DataGridTextColumn Header="{loc:Loc Common.Date}" Binding="{Binding When}" Width="160" ElementStyle="{StaticResource GridText}" />
+      <DataGridTextColumn Header="{loc:Loc Settings.ActivityLog.Actor}" Binding="{Binding Actor}" Width="70" ElementStyle="{StaticResource GridText}" />
+      <DataGridTextColumn Header="{loc:Loc Settings.ActivityLog.Event}" Binding="{Binding Text}" Width="*" ElementStyle="{StaticResource GridText}" />
+    </DataGrid.Columns>
+  </DataGrid>
+  <Grid Margin="0,10,0,0">
+    <TextBlock Text="{Binding PageText}" Style="{StaticResource TextCaption}" VerticalAlignment="Center" />
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button Style="{StaticResource IconButton}" Content="&#xE76B;" Command="{Binding PreviousCommand}" AutomationProperties.Name="Previous page" />
+      <Button Style="{StaticResource IconButton}" Content="&#xE76C;" Command="{Binding NextCommand}" AutomationProperties.Name="Next page" />
+    </StackPanel>
+  </Grid>
+</StackPanel></DataTemplate>
+</ResourceDictionary>
