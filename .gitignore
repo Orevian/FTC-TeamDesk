@@ -1,0 +1,51 @@
+## .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.DotSettings.user
+launchSettings.json
+.vscode/
+_ReSharper*/
+TestResults/
+*.trx
+coverage*.xml
+*.nupkg
+*.snupkg
+publish/
+artifacts/
+.dotnet/
+## Local databases and user data (may contain secrets)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.tdbackup
+*.tdexport.json
+secrets/
+*.secret
+## Secrets and credentials
+.env
+.env.*
+*.pfx
+*.p12
+*.key
+*.pem
+appsettings.Development.json
+appsettings.Local.json
+client_secret*.json
+credentials*.json
+token*.json
+## OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+installer/output/
