@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>FTC.TeamDesk.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FTC.TeamDesk.Core\FTC.TeamDesk.Core.csproj" />
+    <ProjectReference Include="..\..\src\FTC.TeamDesk.Data\FTC.TeamDesk.Data.csproj" />
+    <ProjectReference Include="..\..\src\FTC.TeamDesk.Security\FTC.TeamDesk.Security.csproj" />
+    <ProjectReference Include="..\..\src\FTC.TeamDesk.Services\FTC.TeamDesk.Services.csproj" />
+    <ProjectReference Include="..\..\src\FTC.TeamDesk.AI\FTC.TeamDesk.AI.csproj" />
+    <ProjectReference Include="..\..\src\FTC.TeamDesk.Localization\FTC.TeamDesk.Localization.csproj" />
+  </ItemGroup>
+</Project>
